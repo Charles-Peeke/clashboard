@@ -12,17 +12,30 @@ con <- DBI::dbConnect(RMySQL::MySQL(),
                       dbname="clinical"
 )
 
-#dbListTables(con)
-fetchDataByID <- function(con, table_name, filter_condition) {
-  fetching_table <- dbReadTable(con,table_name)
-  query_result <- filter(fetching_table, NCT_ID == filter_condition)
-  return(query_result)
+fetchDataByID <- function(con, table_name, id_number) {
+  fetching_table <- tbl(con,table_name)
+  query_id_result <- filter(fetching_table, NCT_ID == id_number)
+  return(query_id_result)
 }
 
-result <- fetchDataByID(con, "ClinicalStudy", "NCT00000002")
+fetchDataEnrollment <- function(con, table_name, enrollment_number) {
+  fetching_table <- tbl(con,table_name)
+  enrollment_result <- filter(fetching_table, ENROLLMENT >= enrollment_number)
+  return(enrollment_result)
+}
+
+id_result <- fetchDataByID(con, "ClinicalStudy", "NCT00000002")
+select_id_result <- id_result %>% select(NCT_ID, ENROLLMENT)
+
+enrol_result <- fetchDataEnrollment(con, "ClinicalStudy", 4)
 
 
-#table_name =  "ClinicalStudy"
-#clinical_table <- dbReadTable(con,table_name)
-#nct_result <- filter(clinical_table, NCT_ID == "NCT00000002")
-#url_result <- filter(clinical_table, ENROLLMENT > 4)
+main_clinical_table <-  tbl(con,"ClinicalStudy")
+trial_sponsors_table <-  tbl(con,"TrialSponsors")
+
+main_join<-merge(x=main_clinical_table,y=trial_sponsors_table,by="NCT_ID")
+
+
+# id_result, select_id_result, enrol_result, main_join
+
+

@@ -29,6 +29,26 @@ CREATE TABLE ClinicalStudy (
   	DETAILED_DESCRIPTION    CHAR(100)
 );
 
+DROP TABLE IF EXISTS TrialSponsors;
+
+CREATE TABLE TrialSponsors (
+	NCT_ID        CHAR(11) NOT NULL,
+	SPONSOR       CHAR(100),
+	SPONSOR_TYPE  CHAR(12),
+	FOREIGN KEY (NCT_ID) REFERENCES ClinicalStudy(NCT_ID)
+
+);
+
+DROP TABLE IF EXISTS Sponsors;
+
+CREATE TABLE Sponsors (
+	SPONSOR CHAR(100) NOT NULL,
+	AGENCY CHAR(100),
+	AGENCY_CLASS CHAR(100)
+);
+
+
+
 
 INSERT INTO ClinicalStudy VALUES 
 (
@@ -50,10 +70,26 @@ INSERT INTO ClinicalStudy VALUES
 1,
 "https://github.com/MoravianCollege/clashboard",
 "March 01, 2019",
-"Merck & Co. Inc.",
+"Moravian College",
 "Sponsor",
 "OBJECTIVES: I. Determine the objective response to treatment for malfuncitons in patients."
 );
+
+INSERT INTO TrialSponsors VALUES (
+"NCT00000001",
+"Sponsorship Company",
+"Lead"
+);
+
+INSERT INTO Sponsors VALUES (
+  "Sponsorship Company",
+  "Department of Computer Science",
+  "Other"
+);
+
+
+
+
 
 INSERT INTO ClinicalStudy VALUES 
 (
@@ -78,4 +114,17 @@ INSERT INTO ClinicalStudy VALUES
 "Merck & Co. Inc.",
 "Sponsor",
 "OBJECTIVES: IV. Determine the objective response to medicine in patients that are human beings."
+);
+
+
+INSERT INTO TrialSponsors VALUES (
+"NCT00000002",
+"National Institute of Neurological Disorders and Stroke (NINDS)",
+"Lead"
+);
+
+INSERT INTO Sponsors VALUES (
+  "National Institute of Neurological Disorders and Stroke (NINDS)",
+  "NIH",
+  "Other"
 );
